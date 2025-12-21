@@ -1,0 +1,20 @@
+{
+  "name": "mika-rspress",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "rspress build",
+    "dev": "rspress dev",
+    "preview": "rspress preview"
+  },
+  "dependencies": {
+    "@rspress/plugin-preview": "^1.47.0",
+    "antd": "^6.1.1",
+    "element-plus": "^2.13.0",
+    "rspress": "^1.40.2",
+    "vue": "^3.5.26"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.17"
+  }
+}
