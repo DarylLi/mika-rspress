@@ -1,0 +1,74 @@
+# Rate 评分
+用于对事物进行评分操作。
+
+### 代码演示
+
+
+#### 基础用法
+<br/>
+import BasicComponents from '../components/rate/basic';
+
+<BasicComponents />
+
+代码：
+```mdx
+import React from 'react';
+import { Rate } from 'mika-design';
+
+const App: React.FC = () => <Rate />;
+
+export default App;
+```
+
+#### 尺寸
+<br/>
+import SizeComponents from '../components/rate/size';
+
+<SizeComponents />
+
+代码：
+```mdx
+import React from 'react';
+import { Flex, Rate } from 'mika-design';
+
+const App: React.FC = () => (
+  <Flex vertical gap={12}>
+    <Rate size="large" />
+    <Rate />
+    <Rate size="small" />
+  </Flex>
+);
+
+export default App;
+```
+
+#### 自定义字符
+<br/>
+import CustomComponents from '../components/rate/custom';
+
+<CustomComponents />
+
+代码：
+```mdx
+
+import React from 'react';
+import { FrownOutlined, MehOutlined, SmileOutlined } from '@ant-design/icons';
+import { Flex, Rate } from 'mika-design';
+
+const customIcons: Record<number, React.ReactNode> = {
+  1: <FrownOutlined />,
+  2: <FrownOutlined />,
+  3: <MehOutlined />,
+  4: <SmileOutlined />,
+  5: <SmileOutlined />,
+};
+
+const App: React.FC = () => (
+  <Flex gap="middle" vertical>
+    <Rate defaultValue={2} character={({ index = 0 }) => index + 1} />
+    <Rate defaultValue={3} character={({ index = 0 }) => customIcons[index + 1]} />
+  </Flex>
+);
+
+export default App;
+```

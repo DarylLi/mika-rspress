@@ -1,0 +1,215 @@
+# Masonry 瀑布流
+瀑布流布局组件，用于展示不同高度的内容。
+
+## 何时使用
+
+- 展示不规则高度的图片或卡片时
+- 需要按照列数均匀分布内容时
+- 需要响应式调整列数时
+
+### 代码演示
+
+#### 基础用法
+<br/>
+import BasicComponents from '../components/masonry/basic';
+
+<BasicComponents />
+代码：
+```mdx
+import React from 'react';
+import { Card, Masonry } from 'mika-design';
+
+
+const heights = [150, 50, 90, 70, 110, 150, 130, 80, 50, 90, 100, 150, 60, 50, 80].map(
+  (height, index) => {
+    const item: any = {
+      key: `item-${index}`,
+      data: height,
+    };
+
+    if (index === 4) {
+      item.children = (
+        <Card
+          size="small"
+          cover={
+            <img
+              alt="food"
+              src="https://images.unsplash.com/photo-1491961865842-98f7befd1a60?w=523&auto=format"
+            />
+          }
+        >
+          <Card.Meta title="I'm Special" description="Let's have a meal" />
+        </Card>
+      );
+    }
+
+    return item;
+  },
+);
+
+const App: React.FC = () => (
+  <Masonry
+    columns={4}
+    gutter={16}
+    items={heights}
+    itemRender={({ data, index }) => (
+      <Card size="small" style={{ height: data }}>
+        {index + 1}
+      </Card>
+    )}
+  />
+);
+
+export default App;
+```
+<br/>
+
+#### 响应式
+<br/>
+import FitComponents from '../components/masonry/fit';
+
+<FitComponents />
+代码：
+```mdx
+import React from 'react';
+import { Card, Masonry } from 'mika-design';
+
+const heights = [120, 55, 85, 160, 95, 140, 75, 110, 65, 130, 90, 145, 55, 100, 80];
+
+const App: React.FC = () => {
+  const items = heights.map((height, index) => ({
+    key: `item-${index}`,
+    data: height,
+    index,
+  }));
+
+  return (
+    <Masonry
+      columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
+      gutter={{ xs: 8, sm: 12, md: 16 }}
+      items={items}
+      itemRender={(item) => (
+        <Card size="small" style={{ height: item.data }}>
+          {item.index + 1}
+        </Card>
+      )}
+    />
+  );
+};
+
+export default App;
+```
+<br/>
+#### 动态更新
+<br/>
+import DynamicComponents from '../components/masonry/dynamic';
+
+<DynamicComponents />
+代码：
+```mdx
+import React, { useState } from 'react';
+import { CloseOutlined } from '@ant-design/icons';
+import { Button, Card, Flex, theme, Masonry } from 'mika-design';
+
+
+const heights = [150, 50, 90, 70, 110, 150, 130, 80, 50, 90, 100, 150, 70, 50, 80];
+
+type ItemType = {
+  key: number;
+  column?: number;
+  data: number;
+};
+
+const Update: React.FC = () => {
+  const { token } = theme.useToken();
+
+  const [items, setItems] = useState<ItemType[]>(() =>
+    heights.map((height, index) => ({
+      key: index,
+      column: index % 4,
+      data: height,
+    })),
+  );
+
+  const removeItem = (removeKey: React.Key) => {
+    setItems((prevItems) => prevItems.filter(({ key }) => key !== removeKey));
+  };
+
+  const addItem = () => {
+    setItems((prevItems) => [
+      ...prevItems,
+      {
+        key: prevItems.length ? prevItems[prevItems.length - 1].key + 1 : 0,
+        data: Math.floor(Math.random() * 100) + 50,
+      },
+    ]);
+  };
+
+  return (
+    <Flex vertical gap={16}>
+      <Masonry
+        columns={4}
+        gutter={16}
+        items={items}
+        itemRender={({ data, key }) => (
+          <Card size="small" style={{ height: data }}>
+            {Number(key) + 1}
+            <Button
+              style={{
+                position: 'absolute',
+                insetBlockStart: token.paddingSM,
+                insetInlineEnd: token.paddingSM,
+              }}
+              size="small"
+              icon={<CloseOutlined />}
+              onClick={() => removeItem(key)}
+            />
+          </Card>
+        )}
+        onLayoutChange={(sortedItems) => {
+          setItems((prevItems) =>
+            prevItems.map((item) => {
+              const matchItem = sortedItems.find((sortedItem) => sortedItem.key === item.key);
+              return matchItem
+                ? {
+                    ...item,
+                    column: matchItem.column,
+                  }
+                : item;
+            }),
+          );
+        }}
+      />
+      <Button block onClick={addItem}>
+        Add Item
+      </Button>
+    </Flex>
+  );
+};
+
+export default Update;
+```
+
+
+## API
+
+通用属性参考：[通用属性](/docs/react/common-props)
+
+
+### MasonryItem
+
+| 参数     | 说明                                             | 类型                 | 默认值 |
+| -------- | ------------------------------------------------ | -------------------- | ------ |
+| children | 自定义展示内容，相对 `itemRender` 具有更高优先级 | `React.ReactNode`    | -      |
+| column   | 自定义所在列                                     | `number`             | -      |
+| data     | 自定义存储数据                                   | `T`                  | -      |
+| height   | 高度                                             | `number`             | -      |
+| key      | 唯一标识                                         | `string` \| `number` | -      |
+
+### Gap
+
+Gap 是项之间的间距，可以是固定值，也可以是响应式配置。
+
+```ts
+type Gap = undefined | number | Partial<Record<'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl', number>>;
+```

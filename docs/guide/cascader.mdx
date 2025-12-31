@@ -1,0 +1,162 @@
+# Cascader 级联选择
+级联选择框。
+
+### 代码演示
+
+
+#### 基础用法
+<br/>
+import BasicComponents from '../components/cascader/basic';
+
+<BasicComponents />
+
+代码：
+```mdx
+import React from 'react';
+import type { CascaderProps } from 'mika-design';
+import { Cascader } from 'mika-design';
+import type { HTMLAriaDataAttributes } from 'mika-design/es/_util/aria-data-attrs';
+
+type Option = {
+  value: string;
+  label: string;
+  children?: Option[];
+} & HTMLAriaDataAttributes;
+
+const options: Option[] = [
+  {
+    value: 'zhejiang',
+    label: 'Zhejiang',
+    'aria-label': 'Zhejiang',
+    'data-title': 'Zhejiang',
+    children: [
+      {
+        value: 'hangzhou',
+        label: 'Hangzhou',
+        'aria-label': 'Hangzhou',
+        'data-title': 'Hangzhou',
+        children: [
+          {
+            value: 'xihu',
+            label: 'West Lake',
+            'aria-label': 'West Lake',
+            'data-title': 'West Lake',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    value: 'jiangsu',
+    label: 'Jiangsu',
+    'aria-label': 'Jiangsu',
+    'data-title': 'Jiangsu',
+    children: [
+      {
+        value: 'nanjing',
+        label: 'Nanjing',
+        'aria-label': 'Nanjing',
+        'data-title': 'Nanjing',
+        children: [
+          {
+            value: 'zhonghuamen',
+            label: 'Zhong Hua Men',
+            'aria-label': 'Zhong Hua Men',
+            'data-title': 'Zhong Hua Men',
+          },
+        ],
+      },
+    ],
+  },
+];
+
+const onChange: CascaderProps<Option>['onChange'] = (value) => {
+  console.log(value);
+};
+
+const App: React.FC = () => (
+  <Cascader options={options} onChange={onChange} placeholder="Please select" />
+);
+
+export default App;
+```
+
+#### 搜索
+<br/>
+import SearchComponents from '../components/cascader/search';
+
+<SearchComponents />
+
+代码：
+```mdx
+import React from 'react';
+import { Cascader } from 'mika-design';
+import type { CascaderProps, GetProp } from 'mika-design';
+
+type DefaultOptionType = GetProp<CascaderProps, 'options'>[number];
+
+interface Option {
+  value: string;
+  label: string;
+  children?: Option[];
+  disabled?: boolean;
+}
+
+const options: Option[] = [
+  {
+    value: 'zhejiang',
+    label: 'Zhejiang',
+    children: [
+      {
+        value: 'hangzhou',
+        label: 'Hangzhou',
+        children: [
+          {
+            value: 'xihu',
+            label: 'West Lake',
+          },
+          {
+            value: 'xiasha',
+            label: 'Xia Sha',
+            disabled: true,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    value: 'jiangsu',
+    label: 'Jiangsu',
+    children: [
+      {
+        value: 'nanjing',
+        label: 'Nanjing',
+        children: [
+          {
+            value: 'zhonghuamen',
+            label: 'Zhong Hua men',
+          },
+        ],
+      },
+    ],
+  },
+];
+
+const onChange: CascaderProps<Option>['onChange'] = (value, selectedOptions) => {
+  console.log(value, selectedOptions);
+};
+
+const filter = (inputValue: string, path: DefaultOptionType[]) =>
+  path.some((option) => (option.label as string).toLowerCase().includes(inputValue.toLowerCase()));
+
+const App: React.FC = () => (
+  <Cascader
+    options={options}
+    onChange={onChange}
+    placeholder="Please select"
+    showSearch={{ filter, onSearch: (value) => console.log(value) }}
+  />
+);
+
+export default App;
+```

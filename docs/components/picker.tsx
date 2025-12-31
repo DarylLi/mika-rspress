@@ -1,6 +1,6 @@
 import React,{useEffect} from 'react';
-import type { TimePickerProps } from 'antd';
-import { TimePicker } from 'antd';
+import type { TimePickerProps } from 'mika-design';
+import { TimePicker } from 'mika-design';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { createApp } from 'vue'
@@ -9,7 +9,7 @@ import { createApp } from 'vue'
 
 dayjs.extend(customParseFormat);
 
-const onChange: TimePickerProps['onChange'] = (time, timeString) => {
+const onChange: TimePickerProps['onChange'] = (time:any, timeString:any) => {
   console.log(time, timeString);
 };
 

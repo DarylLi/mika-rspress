@@ -1,0 +1,41 @@
+:root {
+  --rp-c-brand: #fbe2f0;
+  --rp-c-brand-dark: #fa9fd2;
+  --rp-c-brand-darker: #e2a7c8;
+  --rp-c-brand-light: #e4bfd4;
+  --rp-c-brand-lighter: #efb6d6;
+  --rp-home-hero-name-background: -webkit-linear-gradient(120deg, var(--rp-c-brand) 30%, #42d3d296);
+  --rp-home-mask-background-image: conic-gradient(from 180deg at 50% 50%, var(--rp-c-brand) 0deg, 180deg, #42d3d296 1turn);
+  --rp-c-bg-mute: #79e9fd;
+  --custom-menu-dark-sub-menu-item-bg: #ffc6e6;
+}
+#logo{
+    width: 215px;
+    height: auto;
+}
+.navContainer_d18b1{
+  background: #87b1f2;
+}
+.navBarTitle_c5f07{
+  a{
+    pointer-events: none;
+  }
+}
+.navBarTitle_c5f07::before{
+    content: "";
+    z-index: 122;
+    border-radius: 320px;
+    width: 300px;
+    height: 72px;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.hover\:text-gray-600:hover{
+  color: #fbe2f0!important;
+  border-color: #fbe2f0!important;
+}
+.rspress-home-hero-image img{
+  border-radius: 320px;
+}

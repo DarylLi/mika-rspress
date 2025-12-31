@@ -1,0 +1,232 @@
+# Upload 上传
+文件选择上传和拖拽上传控件。
+
+### 代码演示
+
+
+#### 基础用法
+<br/>
+import BasicComponents from '../components/upload/basic';
+
+<BasicComponents />
+
+代码：
+```mdx
+import React from 'react';
+import { UploadOutlined } from '@ant-design/icons';
+import type { UploadProps } from 'mika-design';
+import { Button, message, Upload } from 'mika-design';
+
+const props: UploadProps = {
+  name: 'file',
+  action: 'https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload',
+  headers: {
+    authorization: 'authorization-text',
+  },
+  onChange(info) {
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`);
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
+};
+
+const App: React.FC = () => (
+  <Upload {...props}>
+    <Button icon={<UploadOutlined />}>Click to Upload</Button>
+  </Upload>
+);
+
+export default App;
+```
+
+
+#### 照片墙
+<br/>
+import WallComponents from '../components/upload/wall';
+
+<WallComponents />
+
+代码：
+```mdx
+import React, { useState } from 'react';
+import { PlusOutlined } from '@ant-design/icons';
+import { Image, Upload } from 'mika-design';
+import type { GetProp, UploadFile, UploadProps } from 'mika-design';
+
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+
+const getBase64 = (file: FileType): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+
+const App: React.FC = () => {
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [fileList, setFileList] = useState<UploadFile[]>([
+    {
+      uid: '-1',
+      name: 'image.png',
+      status: 'done',
+      url: 'https://all.franxxdaryl.site/assets/head/head10.png',
+    },
+    {
+      uid: '-2',
+      name: 'image.png',
+      status: 'done',
+      url: 'https://all.franxxdaryl.site/assets/head/head11.png',
+    },
+    {
+      uid: '-3',
+      name: 'image.png',
+      status: 'done',
+      url: 'https://all.franxxdaryl.site/assets/head/head12.png',
+    },
+    {
+      uid: '-4',
+      name: 'image.png',
+      status: 'done',
+      url: 'https://all.franxxdaryl.site/assets/head/head13.png',
+    },
+    {
+      uid: '-xxx',
+      percent: 50,
+      name: 'image.png',
+      status: 'uploading',
+      url: 'https://all.franxxdaryl.site/assets/head/head14.png',
+    },
+    {
+      uid: '-5',
+      name: 'image.png',
+      status: 'error',
+    },
+  ]);
+
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as FileType);
+    }
+
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+  };
+
+  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) =>
+    setFileList(newFileList);
+
+  const uploadButton = (
+    <button style={{ border: 0, background: 'none' }} type="button">
+      <PlusOutlined />
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </button>
+  );
+  return (
+    <>
+      <Upload
+        action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+        listType="picture-card"
+        fileList={fileList}
+        onPreview={handlePreview}
+        onChange={handleChange}
+      >
+        {fileList.length >= 8 ? null : uploadButton}
+      </Upload>
+      {previewImage && (
+        <Image
+          styles={{ root: { display: 'none' } }}
+          preview={{
+            open: previewOpen,
+            onOpenChange: (visible) => setPreviewOpen(visible),
+            afterOpenChange: (visible) => !visible && setPreviewImage(''),
+          }}
+          src={previewImage}
+        />
+      )}
+    </>
+  );
+};
+
+export default App;
+```
+
+#### 拖拽上传
+<br/>
+import DndComponents from '../components/upload/dnd';
+
+<DndComponents />
+
+代码：
+```mdx
+import React from 'react';
+import { InboxOutlined } from '@ant-design/icons';
+import type { UploadProps } from 'mika-design';
+import { message, Upload } from 'mika-design';
+
+const { Dragger } = Upload;
+
+const props: UploadProps = {
+  name: 'file',
+  multiple: true,
+  action: 'https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload',
+  onChange(info) {
+    const { status } = info.file;
+    if (status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully.`);
+    } else if (status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
+  onDrop(e) {
+    console.log('Dropped files', e.dataTransfer.files);
+  },
+};
+
+const App: React.FC = () => (
+  <Dragger {...props}>
+    <p className="ant-upload-drag-icon">
+      <InboxOutlined />
+    </p>
+    <p className="ant-upload-text">Click or drag file to this area to upload</p>
+    <p className="ant-upload-hint">
+      Support for a single or bulk upload. Strictly prohibited from uploading company data or other
+      banned files.
+    </p>
+  </Dragger>
+);
+
+export default App;
+```
+#### API
+
+
+| 参数 | 说明 | 类型 | 默认值 | 版本 |
+| --- | --- | --- | --- | --- |
+| accept | 接受上传的文件类型，详见 [input accept Attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#accept) | string \| [AcceptObject](#acceptobject) | - |  |
+| action | 上传的地址 | string \| (file) => Promise&lt;string> | - |  |
+| beforeUpload | 上传文件之前的钩子，参数为上传的文件，若返回 `false` 则停止上传。支持返回一个 Promise 对象，Promise 对象 reject 时则停止上传，resolve 时开始上传（ resolve 传入 `File` 或 `Blob` 对象则上传 resolve 传入对象）；也可以返回 `Upload.LIST_IGNORE`，此时列表中将不展示此文件。 **注意：IE9 不支持该方法** | (file: [RcFile](#rcfile), fileList: [RcFile[]](#rcfile)) => boolean \| Promise&lt;File> \| `Upload.LIST_IGNORE` | - |  |
+| data | 上传所需额外参数或返回上传额外参数的方法 | object\|(file) => object \| Promise&lt;object> | - |  |
+| defaultFileList | 默认已经上传的文件列表 | object\[] | - |  |
+| directory | 支持上传文件夹（[caniuse](https://caniuse.com/#feat=input-file-directory)） | boolean | false |  |
+| disabled | 是否禁用 | boolean | false | 对于自定义 Upload children 时请将 disabled 属性同时传给 child node 确保 disabled 渲染效果保持一致 |
+| fileList | 已经上传的文件列表（受控），使用此参数时，如果遇到 `onChange` 只调用一次的问题，请参考 [#2423](https://github.com/ant-design/ant-design/issues/2423) | [UploadFile](#uploadfile)\[] | - |  |
+| headers | 设置上传的请求头部，IE10 以上有效 | object | - |  |
+| iconRender | 自定义显示 icon | (file: UploadFile, listType?: UploadListType) => ReactNode | - |  |
+| maxCount | 限制上传数量。当为 1 时，始终用最新上传的文件代替当前文件 | number | - | 4.10.0 |
+| method | 上传请求的 http method | string | `post` |  |
+| multiple | 是否支持多选文件，`ie10+` 支持。开启后按住 ctrl 可选择多个文件 | boolean | false |  |
+| name | 发到后台的文件参数名 | string | `file` |  |
+| openFileDialogOnClick | 点击打开文件对话框 | boolean | true |  |
+| pastable | 是否支持粘贴文件 | boolean | false | 5.25.0 |
+| withCredentials | 上传请求时是否携带 cookie | boolean | false |  |
+| onDownload | 点击下载文件时的回调，如果没有指定，则默认跳转到文件 url 对应的标签页 | function(file): void | (跳转新标签页) |  |

@@ -1,0 +1,149 @@
+# Flex 弹性布局
+用于对齐的弹性布局容器。
+
+### 代码演示
+
+
+#### 基础用法
+<br/>
+import BasicComponents from '../components/flex/basic';
+
+<BasicComponents />
+
+代码：
+```mdx
+/* eslint-disable react/no-array-index-key */
+import React from 'react';
+import { Flex, Radio } from 'mika-design';
+
+const baseStyle: React.CSSProperties = {
+  width: '25%',
+  height: 54,
+};
+
+const App: React.FC = () => {
+  const [value, setValue] = React.useState<string>('horizontal');
+  return (
+    <Flex gap="middle" vertical>
+      <Radio.Group value={value} onChange={(e) => setValue(e.target.value)}>
+        <Radio value="horizontal">horizontal</Radio>
+        <Radio value="vertical">vertical</Radio>
+      </Radio.Group>
+      <Flex vertical={value === 'vertical'}>
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} style={{ ...baseStyle, backgroundColor: i % 2 ? '#e7adcefc' : '#8a0852e0' }} />
+        ))}
+      </Flex>
+    </Flex>
+  );
+};
+
+export default App;
+```
+
+
+#### 对齐方式
+<br/>
+import AlignComponents from '../components/flex/align';
+
+<AlignComponents />
+
+代码：
+```mdx
+import React from 'react';
+import { Button, Flex, Segmented } from 'mika-design';
+import type { FlexProps } from 'mika-design';
+
+const boxStyle: React.CSSProperties = {
+  width: '100%',
+  height: 120,
+  borderRadius: 6,
+  border: '1px solid #40a9ff',
+};
+
+const justifyOptions = [
+  'flex-start',
+  'center',
+  'flex-end',
+  'space-between',
+  'space-around',
+  'space-evenly',
+];
+
+const alignOptions = ['flex-start', 'center', 'flex-end'];
+
+const App: React.FC = () => {
+  const [justify, setJustify] = React.useState<FlexProps['justify']>(justifyOptions[0]);
+  const [alignItems, setAlignItems] = React.useState<FlexProps['align']>(alignOptions[0]);
+  return (
+    <Flex gap="middle" align="start" vertical>
+      <p>Select justify :</p>
+      <Segmented options={justifyOptions} onChange={setJustify} />
+      <p>Select align :</p>
+      <Segmented options={alignOptions} onChange={setAlignItems} />
+      <Flex style={boxStyle} justify={justify} align={alignItems}>
+        <Button type="primary">Primary</Button>
+        <Button type="primary">Primary</Button>
+        <Button type="primary">Primary</Button>
+        <Button type="primary">Primary</Button>
+      </Flex>
+    </Flex>
+  );
+};
+
+export default App;
+```
+
+
+#### 设置间隙
+<br/>
+import GapComponents from '../components/flex/gap';
+
+<GapComponents />
+
+代码：
+```mdx
+import React from 'react';
+import { Button, Flex, Radio, Slider } from 'mika-design';
+import type { FlexProps } from 'mika-design';
+
+const App: React.FC = () => {
+  const [gapSize, setGapSize] = React.useState<FlexProps['gap']>('small');
+  const [customGapSize, setCustomGapSize] = React.useState<number>(0);
+  return (
+    <Flex gap="middle" vertical>
+      <Radio.Group value={gapSize} onChange={(e) => setGapSize(e.target.value)}>
+        {['small', 'middle', 'large', 'customize'].map((size) => (
+          <Radio key={size} value={size}>
+            {size}
+          </Radio>
+        ))}
+      </Radio.Group>
+      {gapSize === 'customize' && <Slider value={customGapSize} onChange={setCustomGapSize} />}
+      <Flex gap={gapSize !== 'customize' ? gapSize : customGapSize}>
+        <Button type="primary">Primary</Button>
+        <Button>Default</Button>
+        <Button type="dashed">Dashed</Button>
+        <Button type="link">Link</Button>
+      </Flex>
+    </Flex>
+  );
+};
+
+export default App;
+```
+
+#### API
+
+
+
+| 属性 | 说明 | 类型 | 默认值 | 版本 |
+| --- | --- | --- | --- | --- |
+| vertical | flex 主轴的方向是否垂直，使用 `flex-direction: column` | boolean | `false` |
+| wrap | 设置元素单行显示还是多行显示 | flex-wrap \| boolean | nowrap | boolean: 5.17.0 |
+| justify | 设置元素在主轴方向上的对齐方式 | justify-content| normal |  |
+| align | 设置元素在交叉轴方向上的对齐方式 | align-items | normal |  |
+| flex | flex CSS 简写属性 | flex | normal |  |
+| gap | 设置网格之间的间隙 | `small` \| `middle` \| `large` \| string \| number | - |  |
+| component | 自定义元素类型 | React.ComponentType | `div` |  |
+| orientation | 主轴的方向类型 | `horizontal` \| `vertical` | `horizontal` | - |

@@ -1,18 +1,12 @@
 [
   {
+    "text": "Home",
+    "link": "/dist/mika-press/main"
+  },
+  {
     "text": "Guide",
     "link": "/guide/",
     "activeMatch": "/guide/"
-  },
-  {
-    "text": "Hello world",
-    "link": "/hello/",
-    "activeMatch": "/hello/"
-  },
-  {
-    "text": "Button",
-    "link": "/button/",
-    "activeMatch": "/button/"
   },
   {
     "text": "API",

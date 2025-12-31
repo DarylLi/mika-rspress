@@ -1,0 +1,193 @@
+# Spin 加载中
+用于页面和区块的加载中状态。
+
+### 代码演示
+
+
+#### 基础用法
+<br/>
+import BasicComponents from '../components/spin/basic';
+
+<BasicComponents />
+
+代码：
+```mdx
+import React from 'react';
+import { Spin } from 'mika-design';
+
+const App: React.FC = () => <Spin />;
+
+export default App;
+```
+
+#### 自定义描述文案
+<br/>
+import CustomComponents from '../components/spin/custom';
+
+<CustomComponents />
+
+代码：
+```mdx
+import React from 'react';
+import { Alert, Flex, Spin } from 'mika-design';
+
+const contentStyle: React.CSSProperties = {
+  padding: 50,
+  background: 'rgba(0, 0, 0, 0.05)',
+  borderRadius: 4,
+};
+
+const content = <div style={contentStyle} />;
+
+const App: React.FC = () => (
+  <Flex gap="middle" vertical>
+    <Flex gap="middle">
+      <Spin tip="Loading" size="small">
+        {content}
+      </Spin>
+      <Spin tip="Loading">{content}</Spin>
+      <Spin tip="Loading" size="large">
+        {content}
+      </Spin>
+    </Flex>
+    <Spin tip="Loading...">
+      <Alert
+        title="Alert message title"
+        description="Further details about the context of this alert."
+        type="info"
+      />
+    </Spin>
+  </Flex>
+);
+
+export default App;
+```
+
+#### 卡片加载中
+<br/>
+import CardComponents from '../components/spin/card';
+
+<CardComponents />
+
+代码：
+```mdx
+import React from 'react';
+import { Alert, Flex, Spin, Switch } from 'mika-design';
+
+const App: React.FC = () => {
+  const [loading, setLoading] = React.useState<boolean>(false);
+  return (
+    <Flex gap="middle" vertical>
+      <Spin spinning={loading}>
+        <Alert
+          type="info"
+          title="Alert message title"
+          description="Further details about the context of this alert."
+        />
+      </Spin>
+      <p>
+        Loading state：
+        <Switch checked={loading} onChange={setLoading} />
+      </p>
+    </Flex>
+  );
+};
+
+export default App;
+```
+
+#### 进度
+<br/>
+import ProgressComponents from '../components/spin/progress';
+
+<ProgressComponents />
+
+代码：
+```mdx
+import React from 'react';
+import { Flex, Spin, Switch } from 'mika-design';
+
+const App: React.FC = () => {
+  const [auto, setAuto] = React.useState(false);
+  const [percent, setPercent] = React.useState(-50);
+  const timerRef = React.useRef<ReturnType<typeof setTimeout>>(null);
+
+  React.useEffect(() => {
+    timerRef.current = setTimeout(() => {
+      setPercent((v) => {
+        const nextPercent = v + 5;
+        return nextPercent > 150 ? -50 : nextPercent;
+      });
+    }, 100);
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [percent]);
+
+  const mergedPercent = auto ? 'auto' : percent;
+
+  return (
+    <Flex align="center" gap="middle">
+      <Switch
+        checkedChildren="Auto"
+        unCheckedChildren="Auto"
+        checked={auto}
+        onChange={() => {
+          setAuto(!auto);
+          setPercent(-50);
+        }}
+      />
+      <Spin percent={mergedPercent} size="small" />
+      <Spin percent={mergedPercent} />
+      <Spin percent={mergedPercent} size="large" />
+    </Flex>
+  );
+};
+
+export default App;
+```
+
+#### 全屏
+<br/>
+import FullComponents from '../components/spin/full';
+
+<FullComponents />
+
+代码：
+```mdx
+import React from 'react';
+import { Button, Spin } from 'mika-design';
+
+const App: React.FC = () => {
+  const [spinning, setSpinning] = React.useState(false);
+  const [percent, setPercent] = React.useState(0);
+
+  const showLoader = () => {
+    setSpinning(true);
+    let ptg = -10;
+
+    const interval = setInterval(() => {
+      ptg += 5;
+      setPercent(ptg);
+
+      if (ptg > 120) {
+        clearInterval(interval);
+        setSpinning(false);
+        setPercent(0);
+      }
+    }, 100);
+  };
+
+  return (
+    <>
+      <Button onClick={showLoader}>Show fullscreen</Button>
+      <Spin spinning={spinning} percent={percent} fullscreen />
+    </>
+  );
+};
+
+export default App;
+```

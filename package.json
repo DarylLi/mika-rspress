@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@rspress/plugin-preview": "^1.47.0",
-    "antd": "^6.1.1",
+    "mika-design": "^1.0.5",
     "element-plus": "^2.13.0",
     "rspress": "^1.40.2",
     "vue": "^3.5.26"
