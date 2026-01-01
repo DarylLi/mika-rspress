@@ -1,1 +1,7 @@
-["index","Layout","Masonry","Flex","Button","Input","Rate","List","Table","Tree","Upload","Form", "Cascader","Spin"]
+["index", {
+    "type": "section-header",
+    "label": "所有组件"
+  },"Layout","Masonry","Flex","Button","Input","Rate","List","Table","Tree","Upload","Form", "Cascader","Spin",{
+    "type": "section-header",
+    "label": "特性"
+  },"cssInJs"]
