@@ -1,20 +1,30 @@
 {
-  "name": "mika-rspress",
+  "name": "circle-react-ui",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
+  "type": "module",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "author": "Daryl",
   "scripts": {
-    "build": "rspress build",
-    "dev": "rspress dev",
-    "preview": "rspress preview"
-  },
-  "dependencies": {
-    "@rspress/plugin-preview": "^1.47.0",
-    "mika-design": "^1.0.5",
-    "element-plus": "^2.13.0",
-    "rspress": "^1.40.2",
-    "vue": "^3.5.26"
+    "docs:build": "rspress build",
+    "docs:dev": "rspress dev",
+    "docs:preview": "rspress preview",
+    "build": "rslib build",
+    "lib:dev": "rslib dev",
+    "build:dts": "rslib build --dts"
   },
   "devDependencies": {
-    "@types/node": "^18.11.17"
+    "@rspress/plugin-preview": "^1.47.0",
+    "rspress": "^1.40.2",
+    "@types/node": "^18.11.17",
+    "@rslib/core": "^0.19.3",
+    "@rsbuild/plugin-sass": "^1.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18",
+    "mika-design": ">=1.0.5"
   }
 }
