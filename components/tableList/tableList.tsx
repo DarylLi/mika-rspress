@@ -22,7 +22,7 @@ const defaultColumns: TableProps<DataType>['columns'] = [
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
-        render: (text) => <a>{text}</a>,
+        render: (text: string) => <a>{text}</a>,
     },
     {
         title: 'Age',
@@ -38,7 +38,7 @@ const defaultColumns: TableProps<DataType>['columns'] = [
         title: 'Tags',
         key: 'tags',
         dataIndex: 'tags',
-        render: (_, { tags }) => (
+        render: (_: unknown, { tags }: DataType) => (
             <Flex gap="small" align="center" wrap>
                 {tags.map((tag) => {
                     let color = tag.length > 5 ? 'geekblue' : 'green';
@@ -57,7 +57,7 @@ const defaultColumns: TableProps<DataType>['columns'] = [
     {
         title: 'Action',
         key: 'action',
-        render: (_, record) => (
+        render: (_: unknown, record: DataType) => (
             <Space size="middle">
                 <a>Invite {record.name}</a>
                 <a>Delete</a>
