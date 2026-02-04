@@ -13,18 +13,27 @@
     "docs:preview": "rspress preview",
     "build": "rslib build",
     "lib:dev": "rslib dev",
-    "build:dts": "rslib build --dts"
+    "build:dts": "rslib build --dts",
+    "test": "rstest"
   },
   "devDependencies": {
-    "@rspress/plugin-preview": "^1.47.0",
-    "rspress": "^1.40.2",
-    "@types/node": "^18.11.17",
+    "@rsbuild/plugin-react": "^1.4.5",
+    "@rsbuild/plugin-sass": "^1.0.0",
     "@rslib/core": "^0.19.3",
-    "@rsbuild/plugin-sass": "^1.0.0"
+    "@rspress/plugin-preview": "^1.47.0",
+    "@rstest/core": "^0.8.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@types/node": "^18.11.17",
+    "rspress": "^1.40.2"
   },
   "peerDependencies": {
+    "mika-design": ">=1.0.5",
     "react": ">=18",
-    "react-dom": ">=18",
-    "mika-design": ">=1.0.5"
+    "react-dom": ">=18"
+  },
+  "dependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/react": "^16.3.2",
+    "happy-dom": "^20.5.0"
   }
 }
